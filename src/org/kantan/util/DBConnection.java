@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBConnection {
 
 	private static Connection conn;
-	private static String url = "jdbc:mysql://localhost/cakerepo";
+	private static String url = "jdbc:mysql://localhost/geofencedb";
 	private static String user = "root";
 	private static String pwd = "root";
 	

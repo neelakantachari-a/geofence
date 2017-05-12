@@ -10,7 +10,7 @@ public class LocationLog {
 
 	private String chilEmailId;
 	private String coordinates;
-	private Date loggedAt;	
+	private String loggedAt;	
 	private long awayFromFence;
 	
 	public String getChilEmailId() {
@@ -27,11 +27,11 @@ public class LocationLog {
 	public void setCoordinates(String coordinates) {
 		this.coordinates = coordinates;
 	}
-	public Date getLoggedAt() {
+	public String getLoggedAt() {
 		return loggedAt;
 	}
 	@XmlElement
-	public void setLoggedAt(Date loggedAt) {
+	public void setLoggedAt(String loggedAt) {
 		this.loggedAt = loggedAt;
 	}
 }

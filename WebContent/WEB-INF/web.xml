@@ -12,7 +12,5 @@
    	<servlet-mapping> 
       <servlet-name>webservice</servlet-name> 
       <url-pattern>/rest/*</url-pattern> 
-   	</servlet-mapping>  
-   	
-   	    	 
+   	</servlet-mapping>     	   	    	
 </web-app>

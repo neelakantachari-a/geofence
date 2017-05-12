@@ -20,7 +20,7 @@ public class GeoFenceDao {
 		try{
 			Connection conn= DBConnection.getConnection();			 
 			 String insertSql="insert into parent(emailID,passwd,mobileNum, verified) "+
-					 "values('"+user.getEmailId()+"','"+user.getPwd()+"','"+user.getMobileNum()+"','"+user.getVerified()+"')";
+					 "values('"+user.getEmailId()+"','"+user.getPwd()+"','"+user.getMobileNum()+"',"+user.getVerified()+")";
 			 Statement st=conn.createStatement();
 			 isInserted=st.executeUpdate(insertSql);
 		}catch(Exception ex){
@@ -49,10 +49,10 @@ public class GeoFenceDao {
 	
 	public Child getChild(String childEmailId)
 	{
-		Child child = null;
+		Child child = new Child();
 		try{		
 			Connection conn=DBConnection.getConnection();
-			String getLocSql="select * from parent WHERE childEmailID ='"+childEmailId+"'" ;
+			String getLocSql="select * from child WHERE childEmailID ='"+childEmailId+"'" ;
 			Statement stmt=conn.createStatement();
 			ResultSet rs=stmt.executeQuery(getLocSql);
 			if(rs.next())
@@ -61,6 +61,7 @@ public class GeoFenceDao {
 				child.setParentEmailId(rs.getString("parentEmailID"));
 				child.setRefCoordinates(rs.getString("refCoordinates"));
 				child.setRadius(rs.getLong("radius"));
+				//return child;
 			}
 		}catch(Exception e){
 				e.printStackTrace();
@@ -77,7 +78,7 @@ public class GeoFenceDao {
 			String getLocSql="select * from parent p LEFT JOIN child c on p.emailID = c.parentEmailID  where parentEmailID='"+parentEmailId+"'" ;
 			Statement stmt=conn.createStatement();
 			ResultSet rs=stmt.executeQuery(getLocSql);
-			if(rs.next())
+			while(rs.next())
 			{
 				Child child = new Child();
 				
@@ -100,8 +101,7 @@ public class GeoFenceDao {
 		
 		try{
 			Connection conn= DBConnection.getConnection();
-			 
-			String insertSql="insert into child(childEmailID, parentEmailID, refCoordinates, radius) values('"+ child.getChildEmailId()+"','"+child.getParentEmailId()+"','"+child.getRefCoordinates()+"','"+child.getRadius()+"')";
+			 String insertSql="insert into child(childEmailID, parentEmailID, refCoordinates, radius) values('"+ child.getChildEmailId()+"','"+child.getParentEmailId()+"','"+child.getRefCoordinates()+"',"+child.getRadius()+")";
 			Statement st=conn.createStatement();
 			countChildAdded =st.executeUpdate(insertSql);
 		}catch(Exception ex){
@@ -119,13 +119,14 @@ public class GeoFenceDao {
 			String getLocSql="select * from locationlog where childEmailID ='"+childEmailId+"'" ;
 			Statement stmt=conn.createStatement();
 			ResultSet rs=stmt.executeQuery(getLocSql);
-			if(rs.next())
+			
+			while(rs.next())
 			{
 				LocationLog location = new LocationLog();
 				
 				location.setChilEmailId(rs.getString("childEmailID"));
 				location.setCoordinates(rs.getString("coordinates"));
-				location.setLoggedAt(rs.getDate("loggedAt"));
+				location.setLoggedAt(rs.getDate("loggedAt").toString());
 				locations.add(location);
 			}
 		}catch(Exception e){
@@ -134,6 +135,7 @@ public class GeoFenceDao {
 		return locations;
 	}	
 	
+
 	public int addLocationLog(LocationLog location)
 	{
 		int inserted = 0;
@@ -142,9 +144,9 @@ public class GeoFenceDao {
 			Connection conn= DBConnection.getConnection();
 			String emailId=location.getChilEmailId();
 			String coordinates=location.getCoordinates();
-			Date loggedAt=location.getLoggedAt();
+			String loggedAt=location.getLoggedAt();
 			
-			String insertSql="insert into locations(userId,coordinates,recordedAt) values('"+emailId+"','"+coordinates+"','"+loggedAt+"')";
+			String insertSql="insert into locationlog(userId,coordinates,recordedAt) values('"+emailId+"','"+coordinates+"','"+loggedAt+"')";
 			Statement st=conn.createStatement();
 			st.executeUpdate(insertSql);
 		}catch(Exception ex){

@@ -1,13 +1,18 @@
 package org.kantan.service;
-
+//https://github.com/neelakantachari-a/geofence.git
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.kantan.beans.Child;
@@ -23,16 +28,37 @@ public class GeoFenceService {
 
 	GeoFenceDao dao = new GeoFenceDao();
 	
+	
 	@POST
 	@Path("/register")
-	@Produces(MediaType.TEXT_PLAIN)
-	public Boolean register(Parent parent) {
+	@Produces(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String register(@FormParam("emailId") String emailId, @FormParam("mobileNum") String mobileNum, 
+			@FormParam("passwd") String passwd, @FormParam("verified") String verified,
+			@Context HttpServletResponse response)
+	throws IOException{
+		int vari=Integer.valueOf(verified);
+		Parent parent=new Parent();
+		parent.setEmailId(emailId);
+		parent.setMobileNum(mobileNum);
+		parent.setPwd(passwd);
+		parent.setVerified(vari);
+		String registerd = "false";
+		if(dao.register(parent)>0)
+			registerd = "true";
+		return registerd;
+	}
+	
+	/*
+	 public Boolean register(Parent parent) {
 		boolean registerd = false;
 		
 		if(dao.register(parent)>0)
 			registerd = true;
 		return registerd;
 	}
+	 */
+	
 	
 	@POST
 	@Path("/login")
@@ -42,12 +68,17 @@ public class GeoFenceService {
 		return dao.login(parent);		
 	}
 
+	//@GET
+	//@Path("/Locs/{childEmailId}")
+	//@Produces(MediaType.APPLICATION_XML)	
+	//public List<LocationLog> getLocationLog(@PathParam("childEmailId") String childEmailId)
+	
 	@GET
-	@Path("/child")
+	@Path("/child/{childEmailId}")
 	@Produces(MediaType.APPLICATION_XML)	
-	public Child getChild(String childEmailId) {
+	public Child getChild(@PathParam("childEmailId") String childEmailId) {
 		
-		Child child = dao.getChild( childEmailId);
+		Child child = dao.getChild(childEmailId);
 		return child;
 	}
 	
@@ -90,15 +121,15 @@ public class GeoFenceService {
 	public List<LocationLog> getLocationLog(@PathParam("childEmailId") String childEmailId)
 	{
 		
-		Child child=dao.getChild(childEmailId);
+		//Child child=dao.getChild(childEmailId);
 		List<LocationLog> locations =  dao.getLocationLog(childEmailId);
-		List<LocationLog> locWithDistance = new ArrayList<>();
+		//List<LocationLog> locWithDistance = new ArrayList<>();
 		
-		for(LocationLog loc : locations)
-		{
-			String coordinate = loc.getCoordinates();
+		//for(LocationLog loc : locations)
+		//{
+			//String coordinate = loc.getCoordinates();
 			
-		}
+	//	}
 		return locations;
 	}	
 	
