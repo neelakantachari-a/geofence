@@ -1,5 +1,5 @@
 package org.kantan.service;
-//https://github.com/neelakantachari-a/geofence.git
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +23,12 @@ import org.kantan.dao.GeoFenceDao;
 import org.kantan.dao.ParentDao;
 import org.kantan.dao.UsersDao;
 
+//https://github.com/neelakantachari-a/geofence.git
+
 @Path("/service")
 public class GeoFenceService {
 
 	GeoFenceDao dao = new GeoFenceDao();
-	
 	
 	@POST
 	@Path("/register")
@@ -57,8 +58,7 @@ public class GeoFenceService {
 			registerd = true;
 		return registerd;
 	}
-	 */
-	
+	*/
 	
 	@POST
 	@Path("/login")
@@ -155,6 +155,5 @@ public class GeoFenceService {
 			}
 		return user;
 	}*/
-	
-	
+		
 }

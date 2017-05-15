@@ -11,7 +11,7 @@ public class LocationLog {
 	private String chilEmailId;
 	private String coordinates;
 	private String loggedAt;	
-	private long awayFromFence;
+	//private long awayFromFence;
 	
 	public String getChilEmailId() {
 		return chilEmailId;

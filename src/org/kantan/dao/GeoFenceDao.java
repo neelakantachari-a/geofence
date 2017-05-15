@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kantan.beans.Child;
+import org.kantan.beans.Fence;
 import org.kantan.beans.LocationLog;
 import org.kantan.beans.Parent;
 import org.kantan.util.DBConnection;
@@ -135,7 +136,6 @@ public class GeoFenceDao {
 		return locations;
 	}	
 	
-
 	public int addLocationLog(LocationLog location)
 	{
 		int inserted = 0;
@@ -148,11 +148,25 @@ public class GeoFenceDao {
 			
 			String insertSql="insert into locationlog(userId,coordinates,recordedAt) values('"+emailId+"','"+coordinates+"','"+loggedAt+"')";
 			Statement st=conn.createStatement();
-			st.executeUpdate(insertSql);
+			inserted = st.executeUpdate(insertSql);
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
 		
-		return 0;		
+		return inserted;		
+	}
+	
+	public int addFence(Fence fenceObj){
+		int inserted = 0;
+		try{
+			Connection conn = DBConnection.getConnection();
+			String insertQuery = "";
+			
+			Statement stmt = conn.createStatement();
+			inserted = stmt.executeUpdate(insertQuery);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return inserted;
 	}
 }
