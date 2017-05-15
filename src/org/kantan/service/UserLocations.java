@@ -3,7 +3,6 @@ package org.kantan.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -14,14 +13,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
 import org.kantan.beans.Child;
-import org.kantan.beans.Fence;
+//import org.kantan.beans.Fence;
 import org.kantan.beans.LocationLog;
 import org.kantan.beans.Parent;
 import org.kantan.dao.GeoFenceDao;
 import org.kantan.dao.UserLocationsDao;
 import org.kantan.util.DBConnection;
+import java.lang.Math;
 
 @Path("/locations")
 public class UserLocations {
@@ -41,42 +40,46 @@ public class UserLocations {
 	@Path("/logLocation")
 	@Produces(MediaType.APPLICATION_XML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String logLocationData(@FormParam("chilEmailId") String chilEmailId, @FormParam("coordinates") String coordinates, 
+	public String logLocationData(@FormParam("childEmailId") String childEmailId, @FormParam("coordinates") String coordinates, 
 			@FormParam("loggedAt") String loggedAt, @Context HttpServletResponse response)
 	throws IOException{		
 		
 		LocationLog location=new LocationLog();
-		location.setChilEmailId(chilEmailId);
+		location.setChilEmailId(childEmailId);
 		location.setCoordinates(coordinates);
 		location.setLoggedAt(loggedAt);
+		Child child=dao.getChild(childEmailId);
 		
 		// TO DO : calculate the distance between this coordinate and refCoordinate 
 		// if it exceeds radious then push a mail 
-		
-		
+		String refCoordinates= child.getRefCoordinates();
+		if(calculateDistance(coordinates, child.getRefCoordinates())>child.getRadius())
+		{
+			MailService.send("neelakanta.rvce@gmail.com","neelu@malgudi1", child.getParentEmailId(), "child out of region alert","Dear parent this is to inform you that presently your child is out of the fence defined by you");
+			
+		}
 		String logged = "false";
 		if(dao.addLocationLog(location) >0)
 			logged = "true";
 		return logged;
 	}		
 	
+	
 	@POST
-	@Path("/logLocation")
+	@Path("/addChildAndFence")
 	@Produces(MediaType.APPLICATION_XML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String setGeoFence(@FormParam("parentEmailId") String parentEmailId,@FormParam("chilEmailId") String chilEmailId, @FormParam("refCoordinates") String refCoordinates, 
-			@FormParam("radiousCoordinates") String radiousCoordinates, @Context HttpServletResponse response)
-	throws IOException{		
-		
-		Fence fenceObj = new Fence();
-		fenceObj.setChilEmailId(chilEmailId);
-		fenceObj.setParentEmailId(parentEmailId);
-		fenceObj.setRefCoordinates(refCoordinates);
-		//fenceObj.setRadiousCoordinates(radiousCoordinates);
-		fenceObj.setRadious(this.calculateDistance(refCoordinates, radiousCoordinates));
-		String logged = "false";
-		if(dao.addFence(fenceObj) >0)
-			logged = "true";
+	public Boolean setGeoFence(@FormParam("parentEmailId") String parentEmailId,@FormParam("chilEmailId") String chilEmailId, @FormParam("refCoordinates") String refCoordinates, 
+			@FormParam("radius") long radius, @Context HttpServletResponse response)
+	throws IOException{	
+		Child childobj=new Child();
+		childobj.setChildEmailId(chilEmailId);
+		childobj.setParentEmailId(parentEmailId);
+		childobj.setRefCoordinates(refCoordinates);
+		childobj.setRadius(radius);
+		Boolean logged = false;
+		if(dao.addChild(childobj) >0)
+			logged = true;
 		return logged;
 	}	
 	
@@ -86,13 +89,36 @@ public class UserLocations {
 	 * @param LocationB
 	 * @return
 	 */
-	public int calculateDistance(String locationA, String LocationB){
-		// int distance = 0;
-		// till we complete the calculation part distance will be 2000 meter as a default
-		int distance = 2000;
-		
-		// TO DO : calculate distance here
-		
-		return distance;
+	public double calculateDistance(String locationA, String locationB){
+		String[] locA=locationA.split(",");
+		Float lat1=Float.parseFloat(locA[0]);
+		Float lon1=Float.parseFloat(locA[1]);
+		String[] locB=locationB.split(",");
+		Float lat2=Float.parseFloat(locB[0]);
+		Float lon2=Float.parseFloat(locB[1]);
+		double theta = lon1 - lon2;
+		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		dist = dist * 60 * 1.1515;
+		dist = dist * 1.609344;
+
+		return (dist);
 	}
+	
+	private static double deg2rad(double deg) {
+		return (deg * Math.PI / 180.0);
+	}
+	
+	private static double rad2deg(double rad) {
+		return (rad * 180 / Math.PI);
+	}
+
+	public static void mailParenr(String parentMailId ) {
+		
+		
+	}
+		
 }
+		
+	

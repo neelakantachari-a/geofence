@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kantan.beans.Child;
-import org.kantan.beans.Fence;
+//import org.kantan.beans.Fence;
 import org.kantan.beans.LocationLog;
 import org.kantan.beans.Parent;
 import org.kantan.util.DBConnection;
@@ -156,19 +156,5 @@ public class GeoFenceDao {
 		return inserted;		
 	}
 	
-	public int addFence(Fence fenceObj){
-		int inserted = 0;
-		try{
-			Connection conn = DBConnection.getConnection();
-			// TO DO : insert into parent
-			
-			String insertQuery = "";
-			
-			Statement stmt = conn.createStatement();
-			inserted = stmt.executeUpdate(insertQuery);
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return inserted;
-	}
+	
 }
