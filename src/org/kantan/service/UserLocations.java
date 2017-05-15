@@ -50,6 +50,10 @@ public class UserLocations {
 		location.setCoordinates(coordinates);
 		location.setLoggedAt(loggedAt);
 		
+		// TO DO : calculate the distance between this coordinate and refCoordinate 
+		// if it exceeds radious then push a mail 
+		
+		
 		String logged = "false";
 		if(dao.addLocationLog(location) >0)
 			logged = "true";
@@ -76,7 +80,6 @@ public class UserLocations {
 		return logged;
 	}	
 	
-
 	/**
 	 *  This method will return the distance in meters 	// this method should not be exposed as web service
 	 * @param locationA

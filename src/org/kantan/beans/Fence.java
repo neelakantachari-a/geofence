@@ -9,8 +9,7 @@ public class Fence {
 	private String refCoordinates; 
 	//private String radiousCoordinates;
 	private long radious;
-	
-	
+		
 	public String getChilEmailId() {
 		return chilEmailId;
 	}

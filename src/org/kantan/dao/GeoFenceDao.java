@@ -160,6 +160,8 @@ public class GeoFenceDao {
 		int inserted = 0;
 		try{
 			Connection conn = DBConnection.getConnection();
+			// TO DO : insert into parent
+			
 			String insertQuery = "";
 			
 			Statement stmt = conn.createStatement();
