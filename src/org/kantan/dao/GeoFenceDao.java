@@ -125,7 +125,7 @@ public class GeoFenceDao {
 			{
 				LocationLog location = new LocationLog();
 				
-				location.setChilEmailId(rs.getString("childEmailID"));
+				location.setChildEmailId(rs.getString("childEmailID"));
 				location.setCoordinates(rs.getString("coordinates"));
 				location.setLoggedAt(rs.getDate("loggedAt").toString());
 				locations.add(location);
@@ -142,11 +142,11 @@ public class GeoFenceDao {
 		
 		try{
 			Connection conn= DBConnection.getConnection();
-			String emailId=location.getChilEmailId();
+			String emailId=location.getChildEmailId();
 			String coordinates=location.getCoordinates();
 			String loggedAt=location.getLoggedAt();
-			
-			String insertSql="insert into locationlog(userId,coordinates,recordedAt) values('"+emailId+"','"+coordinates+"','"+loggedAt+"')";
+			Date logDate=Date.valueOf(loggedAt);
+			String insertSql="insert into locationlog(childEmailID,coordinates,loggedAt) values('"+emailId+"','"+coordinates+"','"+logDate+"')";
 			Statement st=conn.createStatement();
 			inserted = st.executeUpdate(insertSql);
 		}catch(Exception ex){

@@ -28,7 +28,7 @@ public class UserLocations {
 	GeoFenceDao dao = new GeoFenceDao();
 	
 	@GET
-	@Path("/child/{childEmailId}")
+	@Path("/getlocation/{childEmailId}")
 	@Produces(MediaType.APPLICATION_XML)	
 	public List<LocationLog> getLocationLog(@PathParam("childEmailId") String childEmailId) {
 		
@@ -40,12 +40,15 @@ public class UserLocations {
 	@Path("/logLocation")
 	@Produces(MediaType.APPLICATION_XML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	//public String logLocationData(@FormParam("childEmailId") String childEmailId, @FormParam("coordinates") String coordinates, 
+		//	@FormParam("loggedAt") String loggedAt, @Context HttpServletResponse response)
+	
 	public String logLocationData(@FormParam("childEmailId") String childEmailId, @FormParam("coordinates") String coordinates, 
 			@FormParam("loggedAt") String loggedAt, @Context HttpServletResponse response)
+	
 	throws IOException{		
-		
 		LocationLog location=new LocationLog();
-		location.setChilEmailId(childEmailId);
+		location.setChildEmailId(childEmailId);
 		location.setCoordinates(coordinates);
 		location.setLoggedAt(loggedAt);
 		Child child=dao.getChild(childEmailId);
@@ -55,10 +58,14 @@ public class UserLocations {
 		String refCoordinates= child.getRefCoordinates();
 		if(calculateDistance(coordinates, child.getRefCoordinates())>child.getRadius())
 		{
-			MailService.send("neelakanta.rvce@gmail.com","neelu@malgudi1", child.getParentEmailId(), "child out of region alert","Dear parent this is to inform you that presently your child is out of the fence defined by you");
 			
+			MailService.send("neelakanta.rvce@gmail.com","neelu@malgudi1", child.getParentEmailId(), "child out of region alert","Dear parent this is to inform you that presently your child is out of the fence defined by you");
+			System.out.println("alert mail sent to parent");
 		}
+		System.out.println("radius :"+child.getRadius());
+		System.out.println("distance :"+calculateDistance(coordinates, child.getRefCoordinates()));
 		String logged = "false";
+		
 		if(dao.addLocationLog(location) >0)
 			logged = "true";
 		return logged;
@@ -69,17 +76,18 @@ public class UserLocations {
 	@Path("/addChildAndFence")
 	@Produces(MediaType.APPLICATION_XML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Boolean setGeoFence(@FormParam("parentEmailId") String parentEmailId,@FormParam("chilEmailId") String chilEmailId, @FormParam("refCoordinates") String refCoordinates, 
-			@FormParam("radius") long radius, @Context HttpServletResponse response)
+	public String setGeoFence(@FormParam("parentEmailId") String parentEmailId,@FormParam("childEmailId") String childEmailId, @FormParam("refCoordinates") String refCoordinates, 
+			@FormParam("radius") String radius, @Context HttpServletResponse response)
 	throws IOException{	
+		long rad= Long.parseLong(radius);
 		Child childobj=new Child();
-		childobj.setChildEmailId(chilEmailId);
+		childobj.setChildEmailId(childEmailId);
 		childobj.setParentEmailId(parentEmailId);
 		childobj.setRefCoordinates(refCoordinates);
-		childobj.setRadius(radius);
-		Boolean logged = false;
+		childobj.setRadius(rad);
+		String logged = "false";
 		if(dao.addChild(childobj) >0)
-			logged = true;
+			logged = "true";
 		return logged;
 	}	
 	

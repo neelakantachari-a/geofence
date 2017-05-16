@@ -8,17 +8,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="locationLog")
 public class LocationLog {
 
-	private String chilEmailId;
+	private String childEmailId;
 	private String coordinates;
 	private String loggedAt;	
 	//private long awayFromFence;
 	
-	public String getChilEmailId() {
-		return chilEmailId;
+	public String getChildEmailId() {
+		return childEmailId;
 	}
 	@XmlElement
-	public void setChilEmailId(String chilEmailId) {
-		this.chilEmailId = chilEmailId;
+	public void setChildEmailId(String childEmailId) {
+		this.childEmailId = childEmailId;
 	}
 	public String getCoordinates() {
 		return coordinates;

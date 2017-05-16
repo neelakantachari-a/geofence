@@ -20,7 +20,7 @@ public class MyApp {
 		List<LocationLog> locations=obj.getLocationLog("deepaksnandihal@gmail.com");
 		System.out.println("displaying locations");
 		for(LocationLog loc:locations)
-			System.out.println(loc.getChilEmailId());
+			System.out.println(loc.getChildEmailId());
 	}
 	}
 
