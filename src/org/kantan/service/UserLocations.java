@@ -40,9 +40,6 @@ public class UserLocations {
 	@Path("/logLocation")
 	@Produces(MediaType.APPLICATION_XML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	//public String logLocationData(@FormParam("childEmailId") String childEmailId, @FormParam("coordinates") String coordinates, 
-		//	@FormParam("loggedAt") String loggedAt, @Context HttpServletResponse response)
-	
 	public String logLocationData(@FormParam("childEmailId") String childEmailId, @FormParam("coordinates") String coordinates, 
 			@FormParam("loggedAt") String loggedAt, @Context HttpServletResponse response)
 	
@@ -56,18 +53,22 @@ public class UserLocations {
 		// TO DO : calculate the distance between this coordinate and refCoordinate 
 		// if it exceeds radious then push a mail 
 		String refCoordinates= child.getRefCoordinates();
-		if(calculateDistance(coordinates, child.getRefCoordinates())>child.getRadius())
-		{
-			
-			MailService.send("neelakanta.rvce@gmail.com","neelu@malgudi1", child.getParentEmailId(), "child out of region alert","Dear parent this is to inform you that presently your child is out of the fence defined by you");
-			System.out.println("alert mail sent to parent");
-		}
-		System.out.println("radius :"+child.getRadius());
-		System.out.println("distance :"+calculateDistance(coordinates, child.getRefCoordinates()));
+		//System.out.println("radius :"+child.getRadius());
+		//System.out.println("distance :"+calculateDistance(coordinates, child.getRefCoordinates()));
 		String logged = "false";
 		
 		if(dao.addLocationLog(location) >0)
 			logged = "true";
+		if(calculateDistance(coordinates, child.getRefCoordinates())>child.getRadius())
+		{
+			
+			MailService mailObj=new MailService();
+			mailObj.send("neelakanta.rvce@gmail.com","neelu@malgudi1", child.getParentEmailId(), "child out of region alert","Dear parent this is to inform you that presently your child is out of the fence defined by you");
+			System.out.println("alert mail sent to parent");
+		}
+		System.out.println("radius :"+child.getRadius());
+		System.out.println("distance :"+calculateDistance(coordinates, child.getRefCoordinates()));
+		
 		return logged;
 	}		
 	

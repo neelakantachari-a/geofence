@@ -10,6 +10,7 @@ package org.kantan.service;
 	import javax.mail.internet.*;  
 	  
 	class MailService{  
+		
 	    public static void send(String from,String password,String to,String sub,String msg){  
 	          //Get properties object    
 	          Properties props = new Properties();    
@@ -17,7 +18,7 @@ package org.kantan.service;
 	          props.put("mail.smtp.socketFactory.port", "465");    
 	          props.put("mail.smtp.socketFactory.class",    
 	                    "javax.net.ssl.SSLSocketFactory");    
-	          props.put("mail.smtp.auth", "true");    
+	          props.put("mail.smtp.auth", "true");   
 	          props.put("mail.smtp.port", "465");    
 	          //get Session   
 	          Session session = Session.getDefaultInstance(props,    

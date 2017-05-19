@@ -112,9 +112,9 @@ public class GeoFenceDao {
 		return countChildAdded;
 	}
 	
-	public List<LocationLog> getLocationLog(String childEmailId)
+	public ArrayList<LocationLog> getLocationLog(String childEmailId)
 	{
-		List<LocationLog> locations = new ArrayList<>();
+		ArrayList<LocationLog> locations = new ArrayList<LocationLog>();
 		try{		
 			Connection conn=DBConnection.getConnection();
 			String getLocSql="select * from locationlog where childEmailID ='"+childEmailId+"'" ;
@@ -127,7 +127,8 @@ public class GeoFenceDao {
 				
 				location.setChildEmailId(rs.getString("childEmailID"));
 				location.setCoordinates(rs.getString("coordinates"));
-				location.setLoggedAt(rs.getDate("loggedAt").toString());
+				//location.setLoggedAt(rs.getDate("loggedAt").toString());
+				location.setLoggedAt(rs.getString("loggedAt"));
 				locations.add(location);
 			}
 		}catch(Exception e){
@@ -145,8 +146,8 @@ public class GeoFenceDao {
 			String emailId=location.getChildEmailId();
 			String coordinates=location.getCoordinates();
 			String loggedAt=location.getLoggedAt();
-			Date logDate=Date.valueOf(loggedAt);
-			String insertSql="insert into locationlog(childEmailID,coordinates,loggedAt) values('"+emailId+"','"+coordinates+"','"+logDate+"')";
+			//Date logDate=Date.valueOf(loggedAt);
+			String insertSql="insert into locationlog(childEmailID,coordinates,loggedAt) values('"+emailId+"','"+coordinates+"','"+loggedAt+"')";
 			Statement st=conn.createStatement();
 			inserted = st.executeUpdate(insertSql);
 		}catch(Exception ex){

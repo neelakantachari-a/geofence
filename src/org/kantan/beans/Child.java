@@ -6,6 +6,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Child {
 
+	@Override
+	public String toString() {
+		return "Child [childEmailId=" + childEmailId + ", parentEmailId=" + parentEmailId + ", refCoordinates="
+				+ refCoordinates + ", radius=" + radius + "]";
+	}
 	private String childEmailId;
 	private String parentEmailId;
 	private String refCoordinates;

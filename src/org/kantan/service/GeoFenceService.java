@@ -26,6 +26,7 @@ import org.kantan.dao.UsersDao;
 //https://github.com/neelakantachari-a/geofence.git
 
 @Path("/service")
+@Produces(MediaType.APPLICATION_XML)
 public class GeoFenceService {
 
 	GeoFenceDao dao = new GeoFenceDao();
