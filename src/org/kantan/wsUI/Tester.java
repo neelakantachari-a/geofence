@@ -19,11 +19,11 @@ public class Tester {
 
 	private Client client;
 	
-	private String REGISTER_REST_SERVICE_URL = "http://192.168.43.172:9999/geoFence/rest/service/register";
-	private String getUser_REST_SERVICE_URL = "http://192.168.43.172:9999/geoFence/rest/service/child/";
-	private String ADDCHILD_REST_SERVICE_URL = "http://192.168.43.172:9999/geoFence/rest/locations/addChildAndFence";
-	private String ADDLOCATIONS_REST_SERVICE_URL = "http://192.168.43.172:9999/geoFence/rest/locations/logLocation";
-	private String GETLOCATION_REST_SERVICE_URL = "http://192.168.43.172:9999/geoFence/rest/locations/getlocation/";
+	private String REGISTER_REST_SERVICE_URL = "http://192.168.0.103:9999/geoFence/rest/service/register";
+	private String getUser_REST_SERVICE_URL = "http://192.168.0.103:9999/geoFence/rest/service/child/";
+	private String ADDCHILD_REST_SERVICE_URL = "http://192.168.0.103:9999/geoFence/rest/locations/addChildAndFence";
+	private String ADDLOCATIONS_REST_SERVICE_URL = "http://192.168.0.103:9999/geoFence/rest/locations/logLocation";
+	private String GETLOCATION_REST_SERVICE_URL = "http://192.168.0.103:9999/geoFence/rest/locations/getlocation/";
 	//private String ip="http/"+tester
 	
 	private static final String SUCCESS_RESULT = "<result>success</result>";
@@ -51,7 +51,7 @@ public class Tester {
 		//tester.testGetChild();
 		//tester.registerTest();
 		//tester.addChildAndFenceTest();
-		tester.logLocationTest();
+		//tester.logLocationTest();
 		//tester.getLocationsTest();
 		
 		
@@ -69,7 +69,7 @@ public class Tester {
 	private void registerTest() {
 		System.out.println("about to register");
 		Form form = new Form();
-		form.param("emailId", "gyan@gmail.com");
+		form.param("emailId", "vadithya1993@gmail.com");
 		form.param("mobileNum", "999999999");
 		form.param("passwd", "abcd");
 		form.param("verified", "1");
@@ -77,6 +77,7 @@ public class Tester {
 		String callResult = client.target(REGISTER_REST_SERVICE_URL)
 				.request(MediaType.APPLICATION_XML)
 				.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), String.class);
+		System.out.println();
 		System.out.println("mid way thru");
 		System.out.println("Test case name: testRegisterUser, Result: " + callResult);
 	}
